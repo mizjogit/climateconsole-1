@@ -1,4 +1,3 @@
-#!/usr/bin/python
 from flask import Flask, url_for, make_response, flash, redirect
 from flask import render_template
 from flask import request
@@ -25,10 +24,16 @@ Bootstrap(app)
 app.config.from_object(__name__)
 app.debug = True
 
-engine = create_engine(u'mysql://josh:@localhost/josh')
+engine = create_engine(u'mysql://root:Schumacher4@localhost/templogger')
 Session = sessionmaker(bind=engine)
 session = Session()
 
+@app.route('/post', methods=['POST'])
+def post():
+    for probe,temp in request.form.items():
+	session.add(sakidb.data(probe, temp))
+    session.commit()
+    return " "
 
 @app.route('/report')
 def report():
