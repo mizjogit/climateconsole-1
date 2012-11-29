@@ -68,6 +68,15 @@ def alertconfig():
     return render_template('alertconfig.html', form=form, vals=session.query(sakidb.config).all())
 
 
+@app.route('/getconfig')
+@app.route('/getconfig/<string:target>')
+def getconfig(target=None):
+     qry = session.query(sakidb.config)
+     if target is not None:
+        qry = qry.filter(sakidb.config.target == target)
+     return ''.join([ str(ii) + "\n"  for ii in qry ])
+
+        
 @app.route('/graph')
 def graph():
     return render_template('graph.html')

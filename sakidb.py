@@ -41,7 +41,7 @@ class config(dbase):
         self.value = value
 
     def __repr__(self):
-        return "<config(%s %s %s %s)>" % (self.target, self.attribute, self.op, self.value)
+        return "%s,%s,%s,%s" % (self.target, self.attribute, self.op, self.value)
 
 
 
