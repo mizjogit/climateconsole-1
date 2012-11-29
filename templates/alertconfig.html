@@ -1,0 +1,14 @@
+{% extends "wkbase.html" %}
+{% import "bootstrap_wtf.html" as wtf %}
+{% set active_page = '/alertconfig' %}
+{% block body_with_flasher %}
+    <div class="container">
+        <div class="page-header">
+            <h3>Alerts Config</h3>
+        </div>
+         <blockquote>
+            Manage alerts.
+         </blockquote>
+         {{ wtf.quick_form(form, action='/alertconfig',  buttons =  [('submit', 'primary', 'Create or Update')]) }}
+   </div>
+{% endblock %}

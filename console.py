@@ -8,6 +8,8 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 import sqlalchemy.exc
 
 from flask.ext.bootstrap import Bootstrap
+from flask_wtf import Form, BooleanField, TextField, validators, IntegerField, SelectField, RadioField
+
 
 import sys
 import json
@@ -24,7 +26,12 @@ Bootstrap(app)
 app.config.from_object(__name__)
 app.debug = True
 
-engine = create_engine(u'mysql://root:Schumacher4@localhost/templogger')
+import socket
+if socket.gethostname() == 'firewall7':
+    engine = create_engine(u'mysql://josh:@localhost/josh')
+else:
+    engine = create_engine(u'mysql://root:Schumacher4@localhost/templogger')
+
 Session = sessionmaker(bind=engine)
 session = Session()
 
@@ -39,6 +46,22 @@ def post():
 def report():
     vals = session.query(sakidb.data).all()
     return render_template('report.html', vals=vals)
+
+class AlertForm(Form):
+    target = TextField('Device',  [validators.Required()])
+    attribute = TextField('Attribute',  [validators.Required()])
+    op = TextField('Operator',  [validators.Required()])
+    value = TextField('Value',  [validators.Required()])
+
+
+@app.route('/alertconfig', methods=['POST', 'GET'])
+def alertconfig():
+    form = AlertForm(request.form)
+    if request.method == 'POST' and form.validate():
+        nf = sakidb.config(form.target.data, form.attribute.data, form.op.data, form.value.data)
+        print nf
+    return render_template('alertconfig.html', form=form)
+
 
 @app.route('/graph')
 def graph():
