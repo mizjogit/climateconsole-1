@@ -10,5 +10,25 @@
             Manage alerts.
          </blockquote>
          {{ wtf.quick_form(form, action='/alertconfig',  buttons =  [('submit', 'primary', 'Create or Update')]) }}
+        <table class="table">
+            <thead>
+              <tr>
+                  <th>Target</th>
+                  <th>Attribute</th>
+                  <th>Operator</th>
+                  <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+             {% for row in vals %}
+                <tr>
+                  <td>{{ row.target }}</td>
+                  <td>{{ row.attribute }}</td>
+                  <td>{{ row.op }}</td>
+                  <td>{{ row.value }}</td>
+                <tr>
+             {% endfor %}
+            <tbody>
+        </table>
    </div>
 {% endblock %}

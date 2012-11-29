@@ -61,7 +61,7 @@ def alertconfig():
         nf = sakidb.config(form.target.data, form.attribute.data, form.op.data, form.value.data)
         session.merge(nf)         # TODO: referential integrity problem?
         session.commit()
-    return render_template('alertconfig.html', form=form)
+    return render_template('alertconfig.html', form=form, vals=session.query(sakidb.config).all())
 
 
 @app.route('/graph')
