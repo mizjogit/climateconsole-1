@@ -59,7 +59,8 @@ def alertconfig():
     form = AlertForm(request.form)
     if request.method == 'POST' and form.validate():
         nf = sakidb.config(form.target.data, form.attribute.data, form.op.data, form.value.data)
-        print nf
+        session.merge(nf)         # TODO: referential integrity problem?
+        session.commit()
     return render_template('alertconfig.html', form=form)
 
 
