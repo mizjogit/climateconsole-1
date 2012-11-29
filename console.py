@@ -22,6 +22,7 @@ sys.stdout = sys.stderr
 
 app = Flask(__name__)
 Bootstrap(app)
+CSRF_ENABLED = False
 
 app.config.from_object(__name__)
 app.debug = True
@@ -54,13 +55,16 @@ class AlertForm(Form):
     value = TextField('Value',  [validators.Required()])
 
 
-@app.route('/alertconfig', methods=['POST', 'GET'])
+@app.route('/alertconfig/', methods=['POST', 'GET'])
 def alertconfig():
-    form = AlertForm(request.form)
-    if request.method == 'POST' and form.validate():
-        nf = sakidb.config(form.target.data, form.attribute.data, form.op.data, form.value.data)
-        session.merge(nf)         # TODO: referential integrity problem?
-        session.commit()
+    if request.method == 'POST': 
+        form = AlertForm()
+        if form.validate():
+            nf = sakidb.config(form.target.data, form.attribute.data, form.op.data, form.value.data)
+            session.merge(nf)  
+            session.commit()
+    else:
+        form = AlertForm(request.args)
     return render_template('alertconfig.html', form=form, vals=session.query(sakidb.config).all())
 
 
