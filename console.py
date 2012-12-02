@@ -45,7 +45,8 @@ def post():
 
 @app.route('/report')
 def report():
-    vals = session.query(sakidb.data).all()
+    #vals = session.query(sakidb.data).all()
+    vals = session.query(sakidb.data).order_by(sakidb.data.timestamp.desc()).limit(12)
     return render_template('report.html', vals=vals)
 
 class AlertForm(Form):
